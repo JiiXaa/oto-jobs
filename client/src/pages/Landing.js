@@ -1,11 +1,13 @@
-import logo from '../assets/img/logo-search.svg';
 import hero from '../assets/img/hero-landing.svg';
+import StyledWrapper from '../assets/styledWrappers/LandingPage';
+import { Link } from 'react-router-dom';
+import { Logo } from '../components';
 
 const Landing = () => {
   return (
-    <main>
+    <StyledWrapper>
       <nav>
-        <img src={logo} alt='OTOjobs' className='logo' />
+        <Logo />
       </nav>
       <div className='container page'>
         <div className='info'>
@@ -18,11 +20,13 @@ const Landing = () => {
             quasi nam recusandae dolore exercitationem quos. Nulla porro
             necessitatibus praesentium commodi impedit dicta!
           </p>
-          <button className='btn btn-hero'>Login/Register</button>
+          <Link to='/register' className='btn btn-hero'>
+            Login/Register
+          </Link>
         </div>
         <img src={hero} alt='jobs lookup' className='img hero-img' />
       </div>
-    </main>
+    </StyledWrapper>
   );
 };
 
