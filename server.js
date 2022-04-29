@@ -2,6 +2,7 @@ import express from 'express';
 const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
+import 'express-async-errors';
 
 const port = process.env.PORT || 5000;
 
