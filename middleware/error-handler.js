@@ -1,10 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
 
 const errorHandlerMiddleware = (err, req, res, next) => {
-  console.log(err);
+  console.log(err.message);
+
   const defaultError = {
-    StatusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-    msg: 'Something went wrong, try again later',
+    // err.statusCode could come from CustomAPIError set up in authController. It throws 400 if name, email or password is missing.
+    StatusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+    // utilize custom errors set up in authController by throwing new Error.
+    msg: err.message || 'Something went wrong, try again later',
   };
 
   if (err.name === 'ValidationError') {
