@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import { StatusCodes } from 'http-status-codes';
+import { BadRequestError } from '../errors/index.js';
 
 // to make code cleaner I use express-async-errors package, it does try/catch behind scenes
 // express-async-errors imported in server.js
@@ -13,35 +14,17 @@ import { StatusCodes } from 'http-status-codes';
 //   }
 // };
 
-class CustomAPIError extends Error {
-  constructor(message) {
-    super(message);
-    // We can create custom error classes by extending the Error class with our own class and custom logic to throw more specific errors. The Error class has the message, name, and stack properties that we inherit from it.
-    // Adding statusCode property on the Error instance
-    // 400 in this case
-  }
-}
-
-class BadRequestError extends CustomAPIError {
-  constructor(message) {
-    super(message);
-    this.statusCode = StatusCodes.BAD_REQUEST;
-  }
-}
-
-class NotFoundError extends CustomAPIError {
-  constructor(message) {
-    super(message);
-    this.statusCode = StatusCodes.NOT_FOUND;
-  }
-}
-
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     // new Error creates object with .message property which we can use as a custom error
     throw new BadRequestError('Please provide all values');
+  }
+
+  const userAlreadyExists = await User.findOne({ email });
+  if (userAlreadyExists) {
+    throw new BadRequestError('Email already in use');
   }
 
   const user = await User.create({ name, email, password });
