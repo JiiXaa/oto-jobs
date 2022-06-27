@@ -15,6 +15,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     // could use quick option for multiple errors:
     // defaultError.msg = err.message;
 
+    // Object.values creates array from the object properties
     defaultError.msg = Object.values(err.errors)
       .map((item) => item.message)
       .join(',');
@@ -22,6 +23,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 
   if (err.code && err.code === 11000) {
     defaultError.StatusCode = StatusCodes.BAD_REQUEST;
+    // Object.keys method returns an array of a given object's own enumerable property names.
     defaultError.msg = `${Object.keys(err.keyValue)} field has to be unique`;
   }
   // res.status(defaultError.StatusCode).json({ msg: err });

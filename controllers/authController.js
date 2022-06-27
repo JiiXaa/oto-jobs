@@ -18,7 +18,21 @@ class CustomAPIError extends Error {
     super(message);
     // We can create custom error classes by extending the Error class with our own class and custom logic to throw more specific errors. The Error class has the message, name, and stack properties that we inherit from it.
     // Adding statusCode property on the Error instance
+    // 400 in this case
+  }
+}
+
+class BadRequestError extends CustomAPIError {
+  constructor(message) {
+    super(message);
     this.statusCode = StatusCodes.BAD_REQUEST;
+  }
+}
+
+class NotFoundError extends CustomAPIError {
+  constructor(message) {
+    super(message);
+    this.statusCode = StatusCodes.NOT_FOUND;
   }
 }
 
@@ -27,7 +41,7 @@ const register = async (req, res) => {
 
   if (!name || !email || !password) {
     // new Error creates object with .message property which we can use as a custom error
-    throw new CustomAPIError('Please provide all values');
+    throw new BadRequestError('Please provide all values');
   }
 
   const user = await User.create({ name, email, password });
