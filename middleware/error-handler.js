@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 const errorHandlerMiddleware = (err, req, res, next) => {
-  console.log(err.message);
+  console.log(err);
 
   const defaultError = {
     // err.statusCode could come from CustomAPIError set up in authController. It throws 400 if name, email or password is missing.

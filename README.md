@@ -5,7 +5,7 @@
 - CSS in JS
 - speeds up the development
 - normalize.css isa small CSS file that provides cross-browser consistency in the default styling of HTML elements.
-- (normalize)[https://necolas.github.io/normalize.css/]
+- [normalize](https://necolas.github.io/normalize.css/)
 - npm install normalize.css and import in the index.js (have to be set above 'index.css')
 
 #### React Router v6, newest version (as of march, 2022)
@@ -37,3 +37,20 @@ A dead simple ES6 async/await support hack for ExpressJS
 
 - import/setup in authController and error-handler
 - setup defaultError
+
+#### Hash Passwords
+
+- [bcrypt.js](https://www.npmjs.com/package/bcryptjs)
+
+```sh
+npm install bcryptjs
+```
+
+- import bcryptjs in User Model
+- await getSalt(10)
+- await hash(password, salt)
+- await compare(requestPassword, currentPassword)
+- [mongoose middleware](https://mongoosejs.com/docs/middleware.html)
+- UserSchema.pre('save', async function() {"this" points back to UserSchema (could log email or password for example: UserSchema.pre('save', function () {
+  console.log(this.password);
+  });)})
