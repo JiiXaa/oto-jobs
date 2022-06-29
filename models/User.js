@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -44,5 +45,11 @@ UserSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+// you can log this right after user is created User.create({}) (i.e authController.js)
+// We create a custom mongoose method to be able to access values for a specific user and use with JWT
+UserSchema.methods.createJWT = function () {
+  return jwt.sign({ userId: this._id }, 'temporarySecret', { expiresIn: '1d' });
+};
 
 export default mongoose.model('User', UserSchema);

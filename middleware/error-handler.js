@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 
 const errorHandlerMiddleware = (err, req, res, next) => {
-  console.log(err);
+  console.log('err ', err);
 
+  // Login defining where the error comes from, i.e Mongoose validators
   const defaultError = {
     // err.statusCode could come from CustomAPIError set up in authController. It throws 400 if name, email or password is missing.
     StatusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
