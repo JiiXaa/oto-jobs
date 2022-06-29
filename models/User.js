@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide password'],
     minlength: 6,
+    // Sets default select() behavior for this path.
+    // Set to true if this path should always be included in the results, false if it should be excluded by default. This setting can be overridden at the query level.
+    // !!! Does not work with Model.create (User.create({}) in this case)
+    select: false,
   },
   lastName: {
     type: String,
@@ -49,7 +53,9 @@ UserSchema.pre('save', async function () {
 // you can log this right after user is created User.create({}) (i.e authController.js)
 // We create a custom mongoose method to be able to access values for a specific user and use with JWT
 UserSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id }, 'temporarySecret', { expiresIn: '1d' });
+  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_LIFETIME,
+  });
 };
 
 export default mongoose.model('User', UserSchema);

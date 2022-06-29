@@ -29,7 +29,18 @@ const register = async (req, res) => {
 
   const user = await User.create({ name, email, password });
   const token = user.createJWT();
-  res.status(StatusCodes.CREATED).json({ user, token });
+  res.status(StatusCodes.CREATED).json({
+    user: {
+      // SchemaType.prototype.select() is set for false but it does not work with User.create
+      // and that is why we hardcode values for front-end. It is important to omit password and not share it.
+      email: user.email,
+      lastName: user.lastName,
+      location: user.location,
+      name: user.name,
+    },
+    token,
+    location: user.location,
+  });
 };
 
 const login = async (req, res) => {
