@@ -18,10 +18,9 @@ import authRouter from './routes/authRoutes.js';
 import jobsRouter from './routes/jobsRoutes.js';
 
 app.use(express.json());
-console.log('hello');
 
-app.get('/', (req, res) => {
-  res.send('welcome');
+app.get('/api/v1', (req, res) => {
+  res.json({ msg: 'my api' });
 });
 
 app.use('/api/v1/auth', authRouter);
