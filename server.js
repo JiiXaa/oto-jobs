@@ -3,12 +3,17 @@ const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
 import 'express-async-errors';
+import morgan from 'morgan';
 
 const port = process.env.PORT || 5000;
 
 // middleware
 import notFoundMiddleware from './middleware/not-found.js';
 import errorHandlerMiddleware from './middleware/error-handler.js';
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
 
 // db and authenticate User
 import connectDB from './db/connect.js';
