@@ -54,3 +54,5 @@ npm install bcryptjs
 - UserSchema.pre('save', async function() {"this" points back to UserSchema (could log email or password for example: UserSchema.pre('save', function () {
   console.log(this.password);
   });)})
+
+#### React Icons
