@@ -1,14 +1,22 @@
 import { Outlet, Link } from 'react-router-dom';
 import Wrapper from '../../assets/styledWrappers/SharedLayout';
+import { Navbar, BigSidebar, SmallSidebar } from '../../components';
 
 const SharedLayout = () => {
   return (
     <Wrapper>
-      <nav>
-        <Link to='add-job'>Add Job</Link>
-        <Link to='all-jobs'>All Jobs</Link>
-      </nav>
-      <Outlet />
+      <main className='dashboard'>
+        {/* displaying of a Small or Big Sidebar depends on CSS media queries as we only want to display one component at the time (not both). */}
+        <SmallSidebar />
+        <BigSidebar />
+        <div>
+          <Navbar />
+          <div className='dashboard-page'>
+            {/* TODO: explain Outlet */}
+            <Outlet />
+          </div>
+        </div>
+      </main>
     </Wrapper>
   );
 };
