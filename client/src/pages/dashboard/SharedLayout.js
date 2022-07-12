@@ -12,7 +12,8 @@ const SharedLayout = () => {
         <div>
           <Navbar />
           <div className='dashboard-page'>
-            {/* TODO: explain Outlet */}
+            {/* The <Outlet> element is used as a placeholder. In this case an <Outlet>enables the Users component to render its child routes. Thus the<Outlet> element will render either a <AllJobs> or <AddJobs> or <Profile> element depending on the current location. */}
+            {/* In simple words <Outlet /> is where nested pages will be displayed */}
             <Outlet />
           </div>
         </div>
