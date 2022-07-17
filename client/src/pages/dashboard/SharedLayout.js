@@ -6,7 +6,7 @@ const SharedLayout = () => {
   return (
     <Wrapper>
       <main className='dashboard'>
-        {/* displaying of a Small or Big Sidebar depends on CSS media queries as we only want to display one component at the time (not both). */}
+        {/* displaying of a Small or Big Sidebar depends on CSS media queries as we only want to display one component at the time (not both). Each css for displaying a component is in styledWrappers/BigSidebar.js nad styledWrappers/SmallSidebar.js */}
         <SmallSidebar />
         <BigSidebar />
         <div>
