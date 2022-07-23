@@ -46,6 +46,11 @@ const UserSchema = new mongoose.Schema({
 
 // Mongoose Middleware (hook)
 UserSchema.pre('save', async function () {
+  /// this.modifiedPaths() shows a array of modified entries
+  // console.log(this.modifiedPaths());
+
+  /// As User model password is set to "select:false" it will not be send on "await user.save()" in authController.js and will be undefined therefore we need to return out of this hook. Also we do not want to hash the already hashed password and avoid future bugs.
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });

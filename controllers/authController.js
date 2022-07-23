@@ -68,7 +68,24 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
   console.log('authController update user: ', req.user);
-  res.send('updateUser');
+  const { email, name, lastName, location } = req.body;
+  if (!email || !name || !lastName || !location) {
+    throw new BadRequestError('Please provide all values');
+  }
+  const user = await User.findOne({ _id: req.user.userId });
+
+  user.email = email;
+  user.name = name;
+  user.lastName = lastName;
+  user.location = location;
+
+  // pre save hook can be found in User.js model
+  await user.save();
+
+  // It is good practice to create new token
+  const token = user.createJWT();
+
+  res.status(StatusCodes.OK).json({ user, token, location: user.location });
 };
 
 export { register, login, updateUser };
