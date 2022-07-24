@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Logo, FormRow, Alert } from '../components';
-import StyledWrapper from '../assets/styledWrappers/RegisterPage';
+import Wrapper from '../assets/styledWrappers/RegisterPage';
 import { useAppContext } from '../context/appContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -51,7 +51,7 @@ const Register = () => {
   }, [user, navigate]);
 
   return (
-    <StyledWrapper className='full-page'>
+    <Wrapper className='full-page'>
       <form className='form' onSubmit={handleSubmit}>
         <Logo />
         <h3>{values.isMember ? 'Login' : 'Register'}</h3>
@@ -91,7 +91,7 @@ const Register = () => {
           </button>
         </p>
       </form>
-    </StyledWrapper>
+    </Wrapper>
   );
 };
 

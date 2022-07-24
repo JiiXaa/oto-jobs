@@ -1,11 +1,11 @@
 import hero from '../assets/img/hero-landing.svg';
-import StyledWrapper from '../assets/styledWrappers/LandingPage';
+import Wrapper from '../assets/styledWrappers/LandingPage';
 import { Link } from 'react-router-dom';
 import { Logo } from '../components';
 
 const Landing = () => {
   return (
-    <StyledWrapper>
+    <Wrapper>
       <nav>
         <Logo />
       </nav>
@@ -26,7 +26,7 @@ const Landing = () => {
         </div>
         <img src={hero} alt='jobs lookup' className='img hero-img' />
       </div>
-    </StyledWrapper>
+    </Wrapper>
   );
 };
 
