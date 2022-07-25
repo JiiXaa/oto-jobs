@@ -36,6 +36,42 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // Axios are set up with interceptors which are a nice way to handle errors and can be used for handling all components (Stats, AllJobs, AddJob, Profile) and be kept in one place.
+  const authFetch = axios.create({
+    baseURL: '/api/v1',
+  });
+
+  // request interceptors
+  authFetch.interceptors.request.use(
+    (config) => {
+      // set Authorization header before request is sent
+      config.headers.common['Authorization'] = `Bearer ${state.token}`;
+      return config;
+    },
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  // response interceptors
+  authFetch.interceptors.response.use(
+    (response) => {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      return response;
+    },
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    (error) => {
+      // error response for back end to show on the front end, msg: 'Please provide all values' when on of the fields is empty (i.e. Profile name, last name etc...)
+      console.log(error.response);
+      // error to show when authorization failed (i.e. bearer token is missing), msg: 'Authentication Invalid'
+      if (error.response.status === 401) {
+        console.log('AUTH ERROR');
+      }
+      return Promise.reject(error);
+    }
+  );
+
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
     clearAlert();
@@ -112,7 +148,14 @@ const AppProvider = ({ children }) => {
   };
 
   const updateUser = async (currentUser) => {
-    console.log(currentUser);
+    console.log('currentUser', currentUser);
+
+    try {
+      const { data } = await authFetch.patch('/auth/updateUser', currentUser);
+      console.log(data);
+    } catch (error) {
+      // console.log(error.response);
+    }
   };
 
   return (
