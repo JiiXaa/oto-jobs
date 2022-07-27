@@ -39,37 +39,37 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // Axios are set up with interceptors which are a nice way to handle errors and can be used for handling all components (Stats, AllJobs, AddJob, Profile) and be kept in one place.
+  /// Axios are set up with interceptors which are a nice way to handle errors and can be used for handling all components (Stats, AllJobs, AddJob, Profile) and be kept in one place.
   const authFetch = axios.create({
     baseURL: '/api/v1',
   });
 
-  // request interceptors
+  /// request interceptors
   authFetch.interceptors.request.use(
     (config) => {
-      // set Authorization header before request is sent
+      /// set Authorization header before request is sent
       config.headers.common['Authorization'] = `Bearer ${state.token}`;
       return config;
     },
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    /// Any status codes that falls outside the range of 2xx cause this function to trigger
     (error) => {
       return Promise.reject(error);
     }
   );
 
-  // response interceptors
+  /// response interceptors
   authFetch.interceptors.response.use(
     (response) => {
-      // Any status code that lie within the range of 2xx cause this function to trigger
+      /// Any status code that lie within the range of 2xx cause this function to trigger
       return response;
     },
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    /// Any status codes that falls outside the range of 2xx cause this function to trigger
     (error) => {
-      // error response for back end to show on the front end, msg: 'Please provide all values' when on of the fields is empty (i.e. Profile name, last name etc...)
-      console.log(error.response);
-      // error to show when authorization failed (i.e. bearer token is missing), msg: 'Authentication Invalid'
+      /// error response for back end to show on the front end, msg: 'Please provide all values' when on of the fields is empty (i.e. Profile name, last name etc...)
+      // console.log(error.response);
+      /// Log out user when authorization failed (i.e. bearer token is missing or expired), msg: 'Authentication Invalid'
       if (error.response.status === 401) {
-        console.log('AUTH ERROR');
+        logoutUser();
       }
       return Promise.reject(error);
     }
@@ -113,7 +113,7 @@ const AppProvider = ({ children }) => {
       // console.log(error.response);
       dispatch({
         type: REGISTER_USER_ERROR,
-        // data.msg comes from error-handler.js msg: defaultError.msg
+        /// data.msg comes from error-handler.js msg: defaultError.msg
         payload: { msg: error.response.data.msg },
       });
     }
@@ -134,7 +134,7 @@ const AppProvider = ({ children }) => {
     } catch (error) {
       dispatch({
         type: LOGIN_USER_ERROR,
-        // data.msg comes from error-handler.js msg: defaultError.msg
+        /// data.msg comes from error-handler.js msg: defaultError.msg
         payload: { msg: error.response.data.msg },
       });
     }
@@ -166,12 +166,15 @@ const AppProvider = ({ children }) => {
       });
       addUserToLS({ user, location, token });
     } catch (error) {
-      dispatch({
-        type: UPDATE_USER_ERROR,
-        payload: { msg: error.response.data.msg },
-      });
-      clearAlert();
+      /// When user is unauthorized (missing/expired token) we don't want to show any messages as user will get logged out (set up in authFetch.interceptors.response) That is only set because alert has 3 seconds delay and can be shown when it shouldn't.
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_USER_ERROR,
+          payload: { msg: error.response.data.msg },
+        });
+      }
     }
+    clearAlert();
   };
 
   return (
@@ -191,7 +194,7 @@ const AppProvider = ({ children }) => {
   );
 };
 
-// Custom hook for easier access to the AppContext from components that needs it. (do not need to import useContext and AppContext in every component)
+/// Custom hook for easier access to the AppContext from components that needs it. (do not need to import useContext and AppContext in every component)
 const useAppContext = () => {
   return useContext(AppContext);
 };
