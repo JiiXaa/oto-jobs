@@ -6,7 +6,7 @@ const auth = async (req, res, next) => {
   // console.log(headers);
   //// authHeader its authorization bearer jwt token and if missing we throw error
   const authHeader = req.headers.authorization;
-  console.log(authHeader);
+  // console.log(authHeader);
   if (!authHeader || !authHeader.startsWith('Bearer')) {
     throw new UnAuthenticatedError('Authentication Invalid');
   }
@@ -14,9 +14,9 @@ const auth = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
   console.log('token', token);
   try {
-    // payload is a { userId: this._id } created by jwt.sign in the User.js schema
+    /// payload is a { userId: this._id } created by jwt.sign in the User.js schema
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('payload', payload);
+    // console.log('payload', payload);
     req.user = { userId: payload.userId };
     next();
   } catch (error) {
