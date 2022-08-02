@@ -14,6 +14,7 @@ const AddJob = () => {
     jobTypeOptions,
     status,
     statusOptions,
+    handleChange,
   } = useAppContext();
 
   const handleSubmit = (e) => {
@@ -23,12 +24,13 @@ const AddJob = () => {
       displayAlert();
       return;
     }
+    console.log('submitted');
   };
 
   const handleJobInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(`${name}: ${value}`);
+    handleChange({ name, value });
   };
 
   return (
